@@ -1,0 +1,24 @@
+{
+  "name": "webservice",
+  "version": "1.0.0",
+  "description": "node server",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kuleketki/webservice.git"
+  },
+  "author": "Ketki Kule",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/kuleketki/webservice/issues"
+  },
+  "homepage": "https://github.com/kuleketki/webservice#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "jest": "^27.5.1"
+  }
+}
