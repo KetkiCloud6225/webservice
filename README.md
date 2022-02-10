@@ -1,5 +1,9 @@
 # Assignment 1
 
+## Prerequisites
+    
+1. Express JS
+2. jest (for unit testing)
 ## Building the application
 
 1. Clone the repository
