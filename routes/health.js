@@ -12,8 +12,8 @@ router.get("/",async (req,res)=>   {
 
 const setSuccessResponse = (response) => {
     
-        //response.status(200);
-        //response.json({ description: "Healhty" });
+        response.status(200);
+        response.json({ description: "Healhty" });
     
 };
 
