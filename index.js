@@ -1,18 +1,27 @@
-const express = require("express");
+require('rootpath')();
+const express = require('express');
 const app = express();
-const port = 3000;
+const cors = require('cors');
+const basicAuth = require('_helpers/basic_auth');
+const errorHandler = require('_middleware/error-handler');
 const healthzRouter = require("./routes/health");
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false}));
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
-// app.get("/",(req,res)=>{
-//     res.json({message:"ok"});
-// });
+// use basic HTTP auth to secure the api
+//app.use(basicAuth);
 
+// api routes
+app.use('/v1/user', require('./users/users.controller'));
+
+//healthz route 
 app.use("/healthz",healthzRouter.router);
 
+// global error handler
+app.use(errorHandler);
 
-app.listen(port,()=>{
-    console.log(`Example app listening at http://localhost:${port}`);
-});
+// start server
+const port = process.env.NODE_ENV === 'production' ? (process.env.PORT || 80) : 3000;
+app.listen(port, () => console.log('Server listening on port ' + port));
