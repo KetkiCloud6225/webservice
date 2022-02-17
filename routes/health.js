@@ -6,14 +6,14 @@ const router = express.Router();
  */
 
 router.get("/",async (req,res)=>   {
-    setSuccessResponse(res, true);
+    console.log("health.js router.get called")
+   
+    setSuccessResponse(res);
     
 });
 
-const setSuccessResponse = (response) => {
-    
-        response.status(200);
-        response.json({ description: "Healhty" });
+const setSuccessResponse = (response) => {  
+    response.sendStatus(200);
     
 };
 
