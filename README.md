@@ -1,9 +1,11 @@
-# Assignment 1
+# Assignment 2
 
 ## Prerequisites
     
 1. Express JS
 2. jest (for unit testing)
+3. mySql
+4. Sequelize
 ## Building the application
 
 1. Clone the repository
