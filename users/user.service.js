@@ -19,11 +19,13 @@ async function getById(id) {
 }
 
 async function create(params) {
+
     // validate
     console.log(params.username + " create")
     const existingUser = await db.User.findOne({ where: { username: params.username } })
     if (existingUser) {
-        throw 'Username "' + params.username + '" is already registered';
+        return { status: 400}
+        //Promise.reject({status: 400});
     }
 
     const user = new db.User(params);
@@ -34,13 +36,28 @@ async function create(params) {
     // save user
     await user.save();
     return {
-        id: user.id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        username: user.username,
-        account_created: user.createdAt,
-        account_updated: user.updatedAt 
+        data: {
+            id: user.id,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            username: user.username,
+            account_created: user.createdAt,
+            account_updated: user.updatedAt 
+        },
+        status: 200
     }
+
+    // Promise.resolve({
+    //     data: {
+    //         id: user.id,
+    //         first_name: user.first_name,
+    //         last_name: user.last_name,
+    //         username: user.username,
+    //         account_created: user.createdAt,
+    //         account_updated: user.updatedAt 
+    //     },
+    //     status: 200
+    // })
 }
 
 
