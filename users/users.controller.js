@@ -40,10 +40,24 @@ function getById(req, res, next) {
 function create(req, res, next) {
     userService.create(req.body)
         .then(user => {
-            res.status(201);
-            res.json(user);
+            if(user.status === 201) {
+                res.status(user.status);
+                res.json(user.data);
+            }else {
+                res.sendStatus(user.status);
+            }
         })
         .catch(next);
+
+
+          // .then(result => {
+        //     console.log(result);
+        //     res.status(result.status);
+        //     res.json(result.data);
+        // })
+        // .catch(e => {
+        //     res.sendStatus(result.status);
+        // });
 }
 
 function update(req, res, next) {
