@@ -54,7 +54,8 @@
                 "sudo yum install unzip -y",
                 "cd ~/ && unzip webservice.zip",
                 "sleep 20",
-                "cd ~/webservice && npm install"
+                "pwd",
+                "ls -l"                
             ]		
         },
 
