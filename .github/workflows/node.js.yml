@@ -27,3 +27,25 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+    - run: git archive -o webservice.zip HEAD
+    - run: cp webservice.zip ami
+    - run: cd ami
+    - run: ls -all
+
+
+    - name: Packer GitHub Actions
+      uses: hashicorp/packer-github-actions@v0.2.0
+      with:
+        command: validate
+        arguments: -syntax-only
+        target: ami/AMI.json
+
+    - name: Packer build
+      uses: riznob/packer-build-action@v1.5
+      with:
+        templateFile: './ami/AMI.json'
+        workingDir: './ami'
+        varFile: 'packer-vars.json'
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

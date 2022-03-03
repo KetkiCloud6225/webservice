@@ -1,0 +1,76 @@
+{
+    "variables": {
+        "aws_access_key": "",
+        "aws_secret_key": "",
+        "aws_region": "",
+        "source_ami": "",
+        "aws_instance_type": "",
+        "ssh_username": "",
+        "demo_account_id": ""
+    },
+    "builders": [
+        {
+            "type": "amazon-ebs",
+            "access_key": "{{user `aws_access_key`}}",
+            "secret_key": "{{user `aws_secret_key`}}",
+            "region": "{{user `aws_region`}}",
+            "instance_type": "{{user `aws_instance_type`}}",
+            "source_ami": "{{user `source_ami`}}",
+            "ssh_username": "{{user `ssh_username`}}",
+            "ami_name": "csye6225_{{timestamp}}",
+            "ami_users": "{{user `demo_account_id`}}",
+			"security_group_id": "sg-01043e09b289d7d8d",
+			"associate_public_ip_address": true,
+            "tags":{
+                "Name": "ketki-{{timestamp}}"
+			},            
+            "ami_description": "AWS Linux 2 AMI for web app"
+		}
+    ],	
+    "provisioners": [
+        {
+			"source":"webservice.zip",
+			"destination":"/home/ec2-user/webservice.zip",
+			"type":"file"
+		},
+        {
+					
+            "type": "shell",
+            "inline": [
+                "sleep 30",
+				"sudo yum -y update",
+                "sudo yum install -y gcc-c++ make",
+				"curl -sL https://rpm.nodesource.com/setup_14.x | sudo -E bash -",
+                "sudo yum install -y nodejs",             
+				"sudo yum -y install https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm",                
+                "echo install community server",
+                "sudo yum -y install mysql-community-server",
+                "sudo systemctl enable --now mysqld",
+                "systemctl status mysqld",
+				"pwd=`sudo grep 'temporary password' /var/log/mysqld.log | rev | cut -d':' -f 1 | rev | xargs`",
+				"sudo mysql -uroot -p$pwd --connect-expired-password -e \"Alter user 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'KetkiKule@27'\"",
+                "sleep 10",
+                "ls -all",
+                "sudo yum install unzip -y",
+                "cd ~/ && unzip webservice.zip",
+                "cd ~/webservice && npm install"
+            ]		
+        },
+
+        {
+			"destination":"/tmp/",
+			"source":"webservice.service",
+			"type":"file"  
+		}, {
+			"type": "shell",
+            "inline": [
+				"sudo cp /tmp/webservice.service /etc/systemd/system",
+				"sudo systemctl start webservice.service",
+				"sudo systemctl enable webservice.service"
+			]
+			
+		}
+       
+       
+    ]
+}
