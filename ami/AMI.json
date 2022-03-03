@@ -55,7 +55,8 @@
                 "cd ~/ && unzip webservice.zip",
                 "sleep 20",
                 "pwd",
-                "ls -l"                
+                "ls -l",
+                "npm install"
             ]		
         },
 
@@ -71,8 +72,6 @@
 				"sudo systemctl enable webservice.service"
 			]
 			
-		}
-       
-       
+		}    
     ]
 }
