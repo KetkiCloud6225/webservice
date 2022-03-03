@@ -43,7 +43,7 @@ jobs:
     - name: Packer build
       uses: riznob/packer-build-action@v1.5
       with:
-        templateFile: './ami/AMI.json'
+        templateFile: 'AMI.json'
         workingDir: './ami'
         varFile: 'packer-vars.json'
       env:
