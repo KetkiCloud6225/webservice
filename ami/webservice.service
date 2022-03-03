@@ -5,8 +5,8 @@ After=network.target
 [Service]
 Type=simple
 User=ec2-user
-WorkingDirectory=/home/ec2-user/webservice
-ExecStart=/usr/bin/node /home/ec2-user/webservice/index.js
+WorkingDirectory=/home/ec2-user/
+ExecStart=/usr/bin/node /home/ec2-user/index.js
 Restart=on-failure
 RestartSec=10
 StandardOutput=syslog
