@@ -102,7 +102,7 @@ async function authenticateUser({username,password}){
     const user = await db.User.findOne({ where: { username: username } })
     if (!user || !(await bcrypt.compare(password, user.password))) {
 
-        throw 'Username or password is incorrect';
+        return { status: 403} ;
     }
     //console.log(user);
 
