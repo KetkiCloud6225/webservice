@@ -56,7 +56,7 @@
                 "sleep 20",
                 "pwd",
                 "ls -l",
-                "cd webservice && npm install"
+                "npm install"
             ]		
         },
 
