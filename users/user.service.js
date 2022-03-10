@@ -2,7 +2,15 @@ const bcrypt = require('bcryptjs');
 const db = require('_helpers/db');
 const fs = require('fs');
 const AWS = require('aws-sdk');
+// Set the Region 
+AWS.config.update({region: 'us-east-1'});
+
 require('dotenv').config();
+
+AWS.config.update({
+    accessKeyId: process.env.ACCESS_KEY,
+    secretAccessKey: process.env.SECRET_KEY
+  });
 
 module.exports = {
     getAll,
@@ -113,20 +121,22 @@ async function deletePic(id) {
 //upload Profile pic 
 async function uploadPic(params,file,userId) {
 
-        // Read content from the file
-        const fileContent = fs.readFileSync(file.path);
+    var s3 = new AWS.S3();
 
-        // Setting up S3 upload parameters
-        const s3Params = {
+    // Read content from the file
+    const fileContent = fs.readFileSync(file.path);
+
+    // Setting up S3 upload parameters
+    const s3Params = {
             Bucket: process.env.AWS_BUCKET_NAME,
             Key: `${userId}-img`, // File name you want to save as in S3
             Body: fileContent
         };
     
-        // Uploading files to the bucket
-        const promise = await s3.upload(s3Params, function(err, data) {
+    // Uploading files to the bucket
+    const promise = await s3.upload(s3Params, function(err, data) {
             if (err) {
-                throw err;
+                console.log("Error", err);
             }
             console.log(`File uploaded successfully. ${data.Location}`);
         });
