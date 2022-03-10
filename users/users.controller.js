@@ -4,8 +4,13 @@ const Joi = require('joi');
 const validateRequest = require('_middleware/validate-request');
 //const Role = require('_helpers/role');
 const userService = require('./user.service');
-const basicAuth = require('../_helpers/basic_auth')
+const basicAuth = require('../_helpers/basic_auth');
+const multer  = require('multer');
+const upload = multer({dest: 'uploads/'});
+
 // routes
+
+router.post('/self/pic',[basicAuth,upload.single('profilePic')],uploadPic);
 
 router.get('/self', basicAuth,getUser);
 //router.get('/:id', getById);
@@ -13,6 +18,7 @@ router.post('/', createSchema, create);
 //router.put('/:id', updateSchema, update);
 router.put('/self', [basicAuth,updateSchema], update);
 //router.delete('/:id', _delete);
+
 
 module.exports = router;
 
@@ -48,16 +54,6 @@ function create(req, res, next) {
             }
         })
         .catch(next);
-
-
-          // .then(result => {
-        //     console.log(result);
-        //     res.status(result.status);
-        //     res.json(result.data);
-        // })
-        // .catch(e => {
-        //     res.sendStatus(result.status);
-        // });
 }
 
 function update(req, res, next) {
@@ -71,6 +67,20 @@ function update(req, res, next) {
 function _delete(req, res, next) {
     userService.delete(req.params.id)
         .then(() => res.json({ message: 'User deleted' }))
+        .catch(next);
+}
+
+//upload ProfilePic
+function uploadPic(req,res,next) {
+    userService.uploadPic(req.body,req.file,req.user.id)
+        .then(user => {
+            if(user.status === 201) {
+                res.status(user.status);
+                res.json(user.data);
+            }else {
+                res.sendStatus(user.status);
+            }
+        })
         .catch(next);
 }
 
