@@ -9,22 +9,9 @@ function model(sequelize) {
         last_name: { type: DataTypes.STRING, allowNull: false },
         username: { type: DataTypes.STRING, allowNull: false },
         password: { type: DataTypes.STRING, allowNull: false }
-        // {
-        //     createdAt: "created_at",
-        //     updatedAt: "updated_at"
-        // }
     };
 
-    const options = {
-        defaultScope: {
-            // exclude password hash by default
-            attributes: { exclude: ['passwordHash'] }
-        },
-        scopes: {
-            // include hash with this scope
-            withHash: { attributes: {}, }
-        }
-    };
-
-    return sequelize.define('User', attributes, options);
+    return sequelize.define('User', attributes,  {
+        timestamps: false
+      });
 }

@@ -7,6 +7,7 @@ module.exports = {
     create,
     update,
     authenticateUser,
+    uploadPic,
     delete: _delete
 };
 
@@ -25,7 +26,6 @@ async function create(params) {
     const existingUser = await db.User.findOne({ where: { username: params.username } })
     if (existingUser) {
         return { status: 400}
-        //Promise.reject({status: 400});
     }
 
     const user = new db.User(params);
@@ -46,33 +46,12 @@ async function create(params) {
         },
         status: 200
     }
-
-    // Promise.resolve({
-    //     data: {
-    //         id: user.id,
-    //         first_name: user.first_name,
-    //         last_name: user.last_name,
-    //         username: user.username,
-    //         account_created: user.createdAt,
-    //         account_updated: user.updatedAt 
-    //     },
-    //     status: 200
-    // })
 }
 
 
 
 async function update(params,username) {
-    console.log("update called");
-    console.log(params);
     const user = await db.User.findOne({ where: { username: username } })
-    console.log(user)
-    
-    // // validate
-    // const userNameChanged = params.username && user.username !== params.username;
-    // if (userNameChanged && await db.User.findOne({ where: { username: username } })) {
-    //     throw 'Username "' + username + '" is already registered';
-    // }
 
     if(params.username && user.username !==params.username) {
         return {
@@ -80,7 +59,6 @@ async function update(params,username) {
         }
     }
     
-
     // hash password if it was entered
     if (params.password) {
         params.password = await bcrypt.hash(params.password, 10);
@@ -121,6 +99,39 @@ async function _delete(id) {
     const user = await getUser(id);
     await user.destroy();
 }
+
+//upload Profile pic 
+async function uploadPic(params,file,userId) {
+
+    if(params.username && user.username !==params.username) {
+        return {
+            status: 400
+        }
+    }
+    const data = {
+        file_name: file.originalname,
+        url: file.path,
+        user_id: userId
+    }
+    let pic = new db.Pic(data);
+    
+    // save pic
+    pic = await pic.save();
+    console.log('Date ');
+    console.log(pic.upload_date);
+    return {
+        data: {
+            id: pic.id,
+            file_name: pic.file_name,
+            url: pic.url,
+            user_id: pic.user_id,
+            upload_date: pic.upload_date
+        },
+        status: 201
+    }
+}
+
+
 
 // helper functions
 
