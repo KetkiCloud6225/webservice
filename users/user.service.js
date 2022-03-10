@@ -1,5 +1,8 @@
 const bcrypt = require('bcryptjs');
 const db = require('_helpers/db');
+const fs = require('fs');
+const AWS = require('aws-sdk');
+require('dotenv').config();
 
 module.exports = {
     getAll,
@@ -103,32 +106,54 @@ async function _delete(id) {
 //upload Profile pic 
 async function uploadPic(params,file,userId) {
 
-    if(params.username && user.username !==params.username) {
-        return {
-            status: 400
-        }
-    }
-    const data = {
-        file_name: file.originalname,
-        url: file.path,
-        user_id: userId
-    }
-    let pic = new db.Pic(data);
+        // Read content from the file
+        const fileContent = fs.readFileSync(file.path);
+
+        // Setting up S3 upload parameters
+        const params = {
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: `${userId}-img`, // File name you want to save as in S3
+            Body: fileContent
+        };
     
-    // save pic
-    pic = await pic.save();
-    console.log('Date ');
-    console.log(pic.upload_date);
-    return {
-        data: {
-            id: pic.id,
-            file_name: pic.file_name,
-            url: pic.url,
-            user_id: pic.user_id,
-            upload_date: pic.upload_date
-        },
-        status: 201
-    }
+        // Uploading files to the bucket
+        const promise = await s3.upload(params, function(err, data) {
+            if (err) {
+                throw err;
+            }
+            console.log(`File uploaded successfully. ${data.Location}`);
+        });
+
+        if(promise) {
+
+            if(params.username && user.username !==params.username) {
+                return {
+                    status: 400
+                }
+            }
+            const data = {
+                file_name: promise.Key,
+                url: promise.Location,
+                user_id: userId
+            }
+            let pic = new db.Pic(data);
+            
+            // save pic
+            pic = await pic.save();
+            console.log('Date ');
+            console.log(pic.upload_date);
+            return {
+                data: {
+                    id: pic.id,
+                    file_name: pic.file_name,
+                    url: pic.url,
+                    user_id: pic.user_id,
+                    upload_date: moment(pic.createdAt).format('YYYY-MM-DD')
+                },
+                status: 201
+            }
+        }
+
 }
 
 

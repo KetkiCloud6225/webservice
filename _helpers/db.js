@@ -16,6 +16,7 @@ async function initialize() {
     console.log(process.env.DB_USERNAME);
     console.log(process.env.DB_PASSWORD);
     console.log(process.env.DB_PORT);
+    
     const connection = await mysql.createConnection({ 
         host: process.env.DB_HOST, 
         user: process.env.DB_USERNAME,
