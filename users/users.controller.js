@@ -11,6 +11,7 @@ const upload = multer({dest: 'uploads/'});
 // routes
 
 router.post('/self/pic',[basicAuth,upload.single('profilePic')],uploadPic);
+router.delete('/self/pic',deletePic);
 
 router.get('/self', basicAuth,getUser);
 //router.get('/:id', getById);
@@ -66,6 +67,12 @@ function update(req, res, next) {
 
 function _delete(req, res, next) {
     userService.delete(req.params.id)
+        .then(() => res.json({ message: 'User deleted' }))
+        .catch(next);
+}
+
+function deletePic(req, res, next) {
+    userService.deletePic(req.user.id)
         .then(() => res.json({ message: 'User deleted' }))
         .catch(next);
 }

@@ -11,6 +11,7 @@ module.exports = {
     update,
     authenticateUser,
     uploadPic,
+    deletePic,
     delete: _delete
 };
 
@@ -103,6 +104,12 @@ async function _delete(id) {
     await user.destroy();
 }
 
+
+async function deletePic(id) {
+    const user = await getUser(id);
+    await user.destroy();
+}
+
 //upload Profile pic 
 async function uploadPic(params,file,userId) {
 
@@ -110,14 +117,14 @@ async function uploadPic(params,file,userId) {
         const fileContent = fs.readFileSync(file.path);
 
         // Setting up S3 upload parameters
-        const params = {
+        const s3Params = {
             Bucket: process.env.AWS_BUCKET_NAME,
             Key: `${userId}-img`, // File name you want to save as in S3
             Body: fileContent
         };
     
         // Uploading files to the bucket
-        const promise = await s3.upload(params, function(err, data) {
+        const promise = await s3.upload(s3Params, function(err, data) {
             if (err) {
                 throw err;
             }
