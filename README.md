@@ -6,6 +6,8 @@
 2. jest (for unit testing)
 3. mySql
 4. Sequelize
+5. multer
+6. 
 ## Building the application
 
 1. Clone the repository

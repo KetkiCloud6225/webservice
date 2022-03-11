@@ -7,10 +7,23 @@ async function basicAuth(req, res, next) {
     if (req.path === '/v1/user/self') {
         return next();
     }
+
+
+    //check for bas request
+    if (req.originalUrl === '/v1/user/self/pic' && req.method === 'POST') {
+        console.log('Ketki');
+       
+    }
    
     // verify auth credentials
+    if(req.headers.authorization === undefined){
+        return res.sendStatus(401);
+    }
     const base64Credentials =  req.headers.authorization.split(' ')[1];
     const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
+    if(credentials === undefined){
+        return res.sendStatus(401);
+    }
     const [username, password] = credentials.split(':');
     console.log(username+" "+password);
 

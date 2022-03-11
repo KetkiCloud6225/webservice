@@ -10,21 +10,21 @@ initialize();
 
 async function initialize() {
     // create db if it doesn't already exist
-   // const { host, port, user, password, database } = config.database;
+    //const { host, port, user, password, database } = config.database;
     //const connection = await mysql.createConnection({ host, port, user, password });
-    console.log(process.env.DB_HOST);
-    console.log(process.env.DB_USERNAME);
-    console.log(process.env.DB_PASSWORD);
-    console.log(process.env.DB_PORT);
-    const connection = await mysql.createConnection({ 
+    //const sequelize = new Sequelize(database, user, password, { dialect: 'mysql' });
+    
+    //uncomment for RDS
+   const connection = await mysql.createConnection({ 
         host: process.env.DB_HOST, 
         user: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD, 
         port: process.env.DB_PORT
         });
     await connection.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.DB_DATABASE}\`;`);
+    
 
-    // connect to db
+
     const sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
         host : process.env.DB_HOST,
         dialectOptions: {
@@ -43,7 +43,10 @@ async function initialize() {
             acquire : 30000,
             idle : 10000 
         }
-    });
+    }); 
+//uncomment for RDS
+
+     
 
     // init models and add them to the exported db object
     db.User = require('../users/user.model')(sequelize);

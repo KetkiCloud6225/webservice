@@ -58,11 +58,13 @@
 			"source":"webservice.service",
 			"type":"file"  
 		}, {
+            "destination":"/home/ec2-user/",
+            "source":"webapp.sh",
+            "type":"file"
+          },{
 			"type": "shell",
             "inline": [
-				"sudo cp /tmp/webservice.service /etc/systemd/system",
-				"sudo systemctl start webservice.service",
-				"sudo systemctl enable webservice.service"
+				"sudo cp /tmp/webservice.service /etc/systemd/system"              				
 			]
 			
 		}    
