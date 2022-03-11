@@ -2,6 +2,8 @@ const bcrypt = require('bcryptjs');
 const db = require('_helpers/db');
 const fs = require('fs');
 const AWS = require('aws-sdk');
+const moment = require('moment');
+const { resolve } = require('path');
 // Set the Region 
 AWS.config.update({region: 'us-east-1'});
 
@@ -10,7 +12,12 @@ require('dotenv').config();
 AWS.config.update({
     accessKeyId: process.env.ACCESS_KEY,
     secretAccessKey: process.env.SECRET_KEY
-  });
+  }); 
+
+//   AWS.config.update({
+//     accessKeyId: "AKIAZ3ZIQD6VBWR3VGVD",
+//     secretAccessKey: "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"
+//   });  
 
 module.exports = {
     getAll,
@@ -20,6 +27,7 @@ module.exports = {
     authenticateUser,
     uploadPic,
     deletePic,
+    getPic,
     delete: _delete
 };
 
@@ -112,14 +120,13 @@ async function _delete(id) {
     await user.destroy();
 }
 
-
-async function deletePic(id) {
-    const user = await getUser(id);
-    await user.destroy();
-}
-
 //upload Profile pic 
 async function uploadPic(params,file,userId) {
+
+    const existingPic = await db.Pic.findOne({ where: { user_id: userId} });
+    if(existingPic) {
+        deletePic(userId);
+    }
 
     var s3 = new AWS.S3();
 
@@ -127,57 +134,143 @@ async function uploadPic(params,file,userId) {
     const fileContent = fs.readFileSync(file.path);
 
     // Setting up S3 upload parameters
-    const s3Params = {
+    /*const s3Params = {
             Bucket: process.env.AWS_BUCKET_NAME,
-            Key: `${userId}-img`, // File name you want to save as in S3
+            Key: `${userId}/${userId}-img`, // File name you want to save as in S3
             Body: fileContent
-        };
+        };*/
+
+    const s3Params = {
+        Bucket: "bucket.dev.ketkikule.me",
+        Key: `${userId}/${file.filename}`, // File name you want to save as in S3
+        Body: fileContent
+    };      
     
-    // Uploading files to the bucket
-    const promise = await s3.upload(s3Params, function(err, data) {
+    try {
+
+        const data = await s3Upload(s3Params);
+    
+        const uploadedFile = {
+            file_name: data.key,
+            url: data.Location,
+            user_id: userId
+        }
+        let pic = new db.Pic(uploadedFile);
+        
+        pic = await pic.save();
+        return {
+            data: {
+                id: pic.id,
+                file_name: pic.file_name,
+                url: pic.url,
+                user_id: pic.user_id,
+                upload_date: moment(pic.createdAt).format('YYYY-MM-DD')
+            },
+            status: 201
+        }
+    } catch (e) {
+        return {
+            status: 400
+        }
+    }
+    
+
+
+}
+
+function s3Upload(params) {
+    var s3 = new AWS.S3();
+    const promise = new Promise((resolve,reject) => {
+
+        s3.upload(params,function(err, result) {
             if (err) {
                 console.log("Error", err);
+                reject(err)
+            } else {
+                console.log(`File uploaded successfully. ${result.Location}`);
+                resolve(result);
             }
-            console.log(`File uploaded successfully. ${data.Location}`);
         });
+    });
 
-        if(promise) {
+    return promise;
+    
+    
+}
 
-            if(params.username && user.username !==params.username) {
-                return {
-                    status: 400
-                }
-            }
-            const data = {
-                file_name: promise.Key,
-                url: promise.Location,
-                user_id: userId
-            }
-            let pic = new db.Pic(data);
-            
-            // save pic
-            pic = await pic.save();
-            console.log('Date ');
-            console.log(pic.upload_date);
+//upload Profile pic 
+async function deletePic(userId) {
+    console.log("DeletePic Called "+userId);
+
+    const existingPic = await db.Pic.findOne({ where: { user_id: userId} });
+    console.log(existingPic);
+    if(existingPic) {
+        var s3 = new AWS.S3();
+        const s3Params = {
+            Bucket: "bucket.dev.ketkikule.me",
+            Key: `${existingPic.file_name}`
+        };  
+
+        try {
+
+            const data = await s3Delete(s3Params);
+            await existingPic.destroy();
             return {
-                data: {
-                    id: pic.id,
-                    file_name: pic.file_name,
-                    url: pic.url,
-                    user_id: pic.user_id,
-                    upload_date: moment(pic.createdAt).format('YYYY-MM-DD')
-                },
-                status: 201
+                status: 204
+            }
+        } catch (e) {
+            return {
+                status: 400
             }
         }
+    
+    }else {
+        return { status: 404}
+    }
 
+}
+
+function s3Delete(params) {
+    var s3 = new AWS.S3();
+    const promise = new Promise((resolve,reject) => {
+
+        s3.deleteObject(params,function(err, result) {
+            if (err) {
+                console.log("Error", err);
+                reject(err)
+            } else {
+                console.log(`File deleted successfully.`);
+                resolve(result);
+            }
+        });
+    });
+
+    return promise;
+    
 }
 
 
 
 // helper functions
 
-async function getUser(id) {
+async function getPic(id) {
+    const pic = await db.Pic.findOne({ where: { user_id: id }});
+    if (!pic) {
+        return {status:400}
+    };
+    return {
+        data: {
+        id: pic.id,
+        file_name: pic.file_name,
+        url: pic.url,
+        user_id: pic.user_id,
+        upload_date: moment(pic.createdAt).format('YYYY-MM-DD')
+        },
+        status : 201
+    };
+}
+
+    async function getUser(id) {
     const user = await db.User.findByPk(id);
     if (!user) throw 'User not found';
     return {
