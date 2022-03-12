@@ -136,7 +136,7 @@ async function uploadPic(params,file,userId) {
     // Setting up S3 upload parameters
     const s3Params = {
             Bucket: process.env.AWS_BUCKET_NAME,
-            Key: `${userId}/${userId}-img`, // File name you want to save as in S3
+            Key: `${userId}/${file.filename}`, // File name you want to save as in S3
             Body: fileContent
         };
 
