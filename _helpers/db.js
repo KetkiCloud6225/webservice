@@ -13,7 +13,7 @@ async function initialize() {
     //const { host, port, user, password, database } = config.database;
     //const connection = await mysql.createConnection({ host, port, user, password });
     //const sequelize = new Sequelize(database, user, password, { dialect: 'mysql' });
-    
+    console.log(process.env);
     //uncomment for RDS
    const connection = await mysql.createConnection({ 
         host: process.env.DB_HOST, 
