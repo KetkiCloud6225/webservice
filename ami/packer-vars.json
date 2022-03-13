@@ -2,7 +2,7 @@
     "aws_access_key": "{{ env `AWS_ACCESS_KEY_ID`}}",
     "aws_secret_key": "{{ env `AWS_SECRET_ACCESS_KEY` }}",
     "aws_region": "us-east-1",
-    "source_ami": "ami-048ff3da02834afdc",
+    "source_ami": "ami-033b95fb8079dc481",
     "aws_instance_type": "t2.micro",
     "ssh_username": "ec2-user",
     "demo_account_id": "257878682470"

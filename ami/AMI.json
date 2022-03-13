@@ -34,39 +34,32 @@
 			"type":"file"
 		},
         {
+            "type": "file",
+            "source": "webservice.service",
+            "destination": "/home/ec2-user/webservice.service"
+		},
+        {
 					
             "type": "shell",
             "inline": [
                 "sleep 30",
 				"sudo yum -y update",
-                "sudo yum install -y gcc-c++ make",
-				"curl -sL https://rpm.nodesource.com/setup_10.x | sudo -E bash -",
+				"curl -sL https://rpm.nodesource.com/setup_14.x| sudo -E bash -",
                 "sudo yum install -y nodejs",								
                 "sleep 10",
                 "ls -all",
-                "sudo yum install unzip -y",
+                "sudo yum -y install zip",
                 "cd ~/ && unzip webservice.zip",
                 "sleep 20",
-                "pwd",
-                "ls -l",
-                "npm install"
+                "sudo npm install nodemon",
+                "sudo npm install",
+                "sudo npm update",
+                "sudo mv /home/ec2-user/webservice.service /etc/systemd/system/webservice.service",
+                "sudo systemctl start webservice.service",
+                "sudo systemctl enable webservice.service"
             ]		
-        },
+        }
 
-        {
-			"destination":"/tmp/",
-			"source":"webservice.service",
-			"type":"file"  
-		}, {
-            "destination":"/home/ec2-user/",
-            "source":"webapp.sh",
-            "type":"file"
-          },{
-			"type": "shell",
-            "inline": [
-				"sudo cp /tmp/webservice.service /etc/systemd/system"              				
-			]
-			
-		}    
+           
     ]
 }
