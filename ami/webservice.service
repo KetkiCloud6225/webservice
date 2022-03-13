@@ -3,6 +3,7 @@ Description=webserver Daemon
 
 [Service]
 User=ec2-user
+TimeoutStartSec=infinity
 ExecStartPre=/bin/sleep 300
 EnvironmentFile=/home/ec2-user/environment.env
 WorkingDirectory=/home/ec2-user/
