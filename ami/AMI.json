@@ -22,7 +22,7 @@
             "ami_users": "{{user `demo_account_id`}}",
 			"associate_public_ip_address": true,
             "tags":{
-                "Name": "ketki-{{timestamp}}"
+                "Name": "csye-{{timestamp}}"
 			},            
             "ami_description": "AWS Linux 2 AMI for web app"
 		}
