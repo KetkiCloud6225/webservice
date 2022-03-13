@@ -14,7 +14,7 @@ router.get("/",async (req,res)=>   {
 });
 
 const setSuccessResponse = (response) => {  
-    response.sendStatus(200);
+    response.status(200);
     response.json(process.env);
     
 };
