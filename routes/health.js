@@ -8,13 +8,13 @@ require('dotenv').config();
 
 router.get("/",async (req,res)=>   {
     console.log("health.js router.get called")
-   
-    setSuccessResponse(res);
+    response.sendStatus(200).json(process.env);
+    //setSuccessResponse(res);
     
 });
 
 const setSuccessResponse = (response) => {  
-    response.sendStatus(200).json(process.env);
+    
     
 };
 
