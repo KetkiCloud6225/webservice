@@ -1,13 +1,15 @@
 [Unit]
 Description=webserver Daemon
+After=network.target
 
 [Service]
 User=ec2-user
-TimeoutStartSec=infinity
-ExecStartPre=/bin/sleep 300
+TimeoutStartSec=500
+ExecStartPre=/bin/sleep 200
 EnvironmentFile=/home/ec2-user/environment.env
 WorkingDirectory=/home/ec2-user/
 ExecStart=/home/ec2-user/webapp.sh
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
