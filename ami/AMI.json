@@ -27,7 +27,8 @@
                 "volume_size": 20,
                 "volume_type": "gp2"
                 }
-            ],
+            ],            
+			"associate_public_ip_address": true,
             "tags":{
                 "Name": "csye-{{timestamp}}"
 			},            
