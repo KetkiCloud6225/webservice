@@ -59,6 +59,7 @@
                 "sudo yum -y install zip",
                 "cd ~/ && unzip webservice.zip",
                 "sleep 20",
+                "touch environment.env",
                 "sudo npm install nodemon",
                 "sudo npm install",
                 "sudo npm update",
@@ -66,8 +67,6 @@
                 "sudo systemctl start webservice.service",
                 "sudo systemctl enable webservice.service"
             ]		
-        }
-
-           
+        }         
     ]
 }
