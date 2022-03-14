@@ -20,7 +20,14 @@
             "ssh_username": "{{user `ssh_username`}}",
             "ami_name": "csye6225_{{timestamp}}",
             "ami_users": "{{user `demo_account_id`}}",
-			"associate_public_ip_address": true,
+            "ami_block_device_mappings": [
+                {
+                "delete_on_termination": true,
+                "device_name": "/dev/xvda",
+                "volume_size": 20,
+                "volume_type": "gp2"
+                }
+            ],
             "tags":{
                 "Name": "csye-{{timestamp}}"
 			},            
