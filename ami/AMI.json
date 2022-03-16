@@ -52,7 +52,6 @@
                 "npm install"
             ]		
         },
-
         {
 			"destination":"/tmp/",
 			"source":"webservice.service",
