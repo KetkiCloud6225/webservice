@@ -6,7 +6,7 @@ const moment = require('moment');
 const { resolve } = require('path');
 // Set the Region 
 AWS.config.update({region: 'us-east-1'});
-const config = require('config.json');
+const config = require('../config.json');
 
 
 AWS.config.update({
