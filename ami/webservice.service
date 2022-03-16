@@ -1,11 +1,10 @@
 [Unit]
-Description=index.js
+Description=server.js
 After=network.target
 
 [Service]
 Type=simple
 User=ec2-user
-EnvironmentFile=/home/ec2-user/environment.env
 WorkingDirectory=/home/ec2-user/
 ExecStart=/usr/bin/node /home/ec2-user/index.js
 Restart=on-failure

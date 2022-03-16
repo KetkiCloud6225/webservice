@@ -1,18 +1,16 @@
 {
     "variables": {
-        "aws_access_key": "",
-        "aws_secret_key": "",
-        "aws_region": "",
-        "source_ami": "",
-        "aws_instance_type": "",
-        "ssh_username": "",
-        "demo_account_id":""
+        "aws_region": "us-east-1",
+        "source_ami": "ami-033b95fb8079dc481",
+        "aws_instance_type": "t2.micro",
+        "ssh_username": "ec2-user",
+        "demo_account_id": "257878682470"
     },
     "builders": [
         {
             "type": "amazon-ebs",
-            "access_key": "{{user `aws_access_key`}}",
-            "secret_key": "{{user `aws_secret_key`}}",
+            "access_key": "AKIAZ3ZIQD6VBWR3VGVD",
+            "secret_key": "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",
             "region": "{{user `aws_region`}}",
             "instance_type": "{{user `aws_instance_type`}}",
 			"security_group_id": "sg-01043e09b289d7d8d",            

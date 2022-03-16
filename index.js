@@ -7,6 +7,9 @@ const errorHandler = require('_middleware/error-handler');
 const healthzRouter = require("./routes/health");
 const multer  = require('multer');
 const upload = multer({ dest: 'uploads/' });
+const db = require('_helpers/db');
+
+db.initialize();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

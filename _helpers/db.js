@@ -4,9 +4,9 @@ const { Sequelize } = require('sequelize');
 require('dotenv').config(); //dotenv
 
 
-module.exports = db = {};
+const db = {};
 
-initialize();
+db.initialize = initialize;
 
 async function initialize() {
     // create db if it doesn't already exist
@@ -27,16 +27,7 @@ async function initialize() {
 
     const sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
         host : process.env.DB_HOST,
-        dialectOptions: {
-            ssl: 'Amazon RDS'
-        },
         dialect : 'mysql',
-        replication:{
-            read :[
-                {host: process.env.DB_HOST, username: process.env.DB_USERNAME, password:process.env.DB_PASSWORD}
-            ],
-            write : {host : process.env.DB_HOST,username:process.env.DB_USERNAME, password:process.env.DB_PASSWORD}
-        },
         pool : {
             max : 5,
             min : 0,
@@ -56,3 +47,5 @@ async function initialize() {
     // sync all models with database
     await sequelize.sync({ alter: true });
 }
+
+export default db;
