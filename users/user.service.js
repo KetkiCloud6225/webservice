@@ -207,7 +207,7 @@ async function deletePic(userId) {
     if(existingPic) {
         var s3 = new AWS.S3();
         const s3Params = {
-            Bucket: "bucket.dev.ketkikule.me",
+            Bucket: process.env.AWS_BUCKET_NAME,
             Key: `${existingPic.file_name}`
         };  
 
