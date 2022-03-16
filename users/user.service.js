@@ -134,17 +134,17 @@ async function uploadPic(params,file,userId) {
     const fileContent = fs.readFileSync(file.path);
 
     // Setting up S3 upload parameters
-    /*const s3Params = {
-            Bucket: process.env.AWS_BUCKET_NAME,
-            Key: `${userId}/${userId}-img`, // File name you want to save as in S3
-            Body: fileContent
-        };*/
-
     const s3Params = {
-        Bucket: "bucket.dev.ketkikule.me",
-        Key: `${userId}/${file.filename}`, // File name you want to save as in S3
-        Body: fileContent
-    };      
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: `${userId}/${file.filename}`, // File name you want to save as in S3
+            Body: fileContent
+        };
+
+    // const s3Params = {
+    //     Bucket: "bucket.dev.ketkikule.me",
+    //     Key: `${userId}/${file.filename}`, // File name you want to save as in S3
+    //     Body: fileContent
+    // };      
     
     try {
 
