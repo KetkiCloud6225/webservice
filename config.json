@@ -4,6 +4,9 @@
         "port": 3306,
         "user": "root",
         "password": "",
-        "database": "testdb"
+        "database": "testdb",
+        "access_key":"AKIAZ3ZIQD6VBWR3VGVD",
+        "secret_key":"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",
+        "s3_bucket":"bucket"
     }
 }

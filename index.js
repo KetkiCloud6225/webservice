@@ -9,7 +9,7 @@ const multer  = require('multer');
 const upload = multer({ dest: 'uploads/' });
 const db = require('_helpers/db');
 
-db.initialize();
+db.sequelize.sync();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
