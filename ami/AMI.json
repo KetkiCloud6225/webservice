@@ -39,7 +39,8 @@
             "inline": [
                 "sleep 30",
 				"sudo yum -y update",
-                "sudo yum install jq",
+                "sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm",
+                "sudo yum install jq -y",
                 "sudo yum install -y gcc-c++ make",
 				"curl -sL https://rpm.nodesource.com/setup_14.x | sudo -E bash -",
                 "sudo yum install -y nodejs",								
