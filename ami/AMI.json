@@ -52,13 +52,9 @@
             "inline": [
                 "sleep 30",
 				"sudo yum -y update",
-<<<<<<< HEAD
                 "sudo yum install jq",
                 "sudo yum install -y gcc-c++ make",
 				"curl -sL https://rpm.nodesource.com/setup_14.x | sudo -E bash -",
-=======
-				"curl -sL https://rpm.nodesource.com/setup_14.x| sudo -E bash -",
->>>>>>> 3576fe326fe7f40ee7acafd66e5e054b5aaee76b
                 "sudo yum install -y nodejs",								
                 "sleep 10",
                 "ls -all",

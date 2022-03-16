@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-require('dotenv').config();
+const config = require('config.json');
 
 /**
  * /healthz endpoint
@@ -15,7 +15,7 @@ router.get("/",async (req,res)=>   {
 
 const setSuccessResponse = (response) => {  
     response.status(200);
-    response.json(process.env);
+    response.json(config.database);
     
 };
 
