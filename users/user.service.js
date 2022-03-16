@@ -6,12 +6,12 @@ const moment = require('moment');
 const { resolve } = require('path');
 // Set the Region 
 AWS.config.update({region: 'us-east-1'});
+const config = require('config.json');
 
-require('dotenv').config();
 
 AWS.config.update({
-    accessKeyId: process.env.ACCESS_KEY,
-    secretAccessKey: process.env.SECRET_KEY
+    accessKeyId: config.database.access_key,
+    secretAccessKey: config.database.secret_key
   }); 
 
 //   AWS.config.update({
@@ -134,17 +134,17 @@ async function uploadPic(params,file,userId) {
     const fileContent = fs.readFileSync(file.path);
 
     // Setting up S3 upload parameters
-    /*const s3Params = {
+   const s3Params = {
             Bucket: process.env.AWS_BUCKET_NAME,
-            Key: `${userId}/${userId}-img`, // File name you want to save as in S3
+            Key: `${userId}/${file.filename}`, // File name you want to save as in S3
             Body: fileContent
-        };*/
+    };
 
-    const s3Params = {
-        Bucket: "bucket.dev.ketkikule.me",
-        Key: `${userId}/${file.filename}`, // File name you want to save as in S3
-        Body: fileContent
-    };      
+    // const s3Params = {
+    //     Bucket: "bucket.dev.ketkikule.me",
+    //     Key: `${userId}/${file.filename}`, // File name you want to save as in S3
+    //     Body: fileContent
+    // };      
     
     try {
 
