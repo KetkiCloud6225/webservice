@@ -1,11 +1,18 @@
 [Unit]
-Description=webserver Daemon
+Description=index.js
+After=network.target
 
 [Service]
+Type=simple
 User=ec2-user
 EnvironmentFile=/home/ec2-user/environment.env
 WorkingDirectory=/home/ec2-user/
-ExecStart=/home/ec2-user/webapp.sh
+ExecStart=/usr/bin/node /home/ec2-user/index.js
+Restart=on-failure
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=webservice-app
 
 [Install]
 WantedBy=multi-user.target
+WantedBy=cloud-init.target

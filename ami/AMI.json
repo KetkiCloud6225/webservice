@@ -20,9 +20,17 @@
             "ssh_username": "{{user `ssh_username`}}",
             "ami_name": "csye6225_{{timestamp}}",
             "ami_users": "{{user `demo_account_id`}}",
+            "ami_block_device_mappings": [
+                {
+                "delete_on_termination": true,
+                "device_name": "/dev/xvda",
+                "volume_size": 20,
+                "volume_type": "gp2"
+                }
+            ],            
 			"associate_public_ip_address": true,
             "tags":{
-                "Name": "ketki-{{timestamp}}"
+                "Name": "csye-{{timestamp}}"
 			},            
             "ami_description": "AWS Linux 2 AMI for web app"
 		}
@@ -34,40 +42,37 @@
 			"type":"file"
 		},
         {
+            "type": "file",
+            "source": "webservice.service",
+            "destination": "/home/ec2-user/webservice.service"
+		},
+        {
 					
             "type": "shell",
             "inline": [
                 "sleep 30",
 				"sudo yum -y update",
+<<<<<<< HEAD
                 "sudo yum install jq",
                 "sudo yum install -y gcc-c++ make",
 				"curl -sL https://rpm.nodesource.com/setup_14.x | sudo -E bash -",
+=======
+				"curl -sL https://rpm.nodesource.com/setup_14.x| sudo -E bash -",
+>>>>>>> 3576fe326fe7f40ee7acafd66e5e054b5aaee76b
                 "sudo yum install -y nodejs",								
                 "sleep 10",
                 "ls -all",
-                "sudo yum install unzip -y",
+                "sudo yum -y install zip",
                 "cd ~/ && unzip webservice.zip",
                 "sleep 20",
-                "pwd",
-                "ls -l",
-                "npm install"
+                "touch environment.env",
+                "sudo npm install nodemon",
+                "sudo npm install",
+                "sudo npm update",
+                "sudo mv /home/ec2-user/webservice.service /etc/systemd/system/webservice.service",
+                "sudo systemctl start webservice.service",
+                "sudo systemctl enable webservice.service"
             ]		
-        },
-
-        {
-			"destination":"/tmp/",
-			"source":"webservice.service",
-			"type":"file"  
-		}, {
-            "destination":"/home/ec2-user/",
-            "source":"webapp.sh",
-            "type":"file"
-          },{
-			"type": "shell",
-            "inline": [
-				"sudo cp /tmp/webservice.service /etc/systemd/system"              				
-			]
-			
-		}    
+        }         
     ]
 }
