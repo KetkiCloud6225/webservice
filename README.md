@@ -8,7 +8,7 @@
 4. Sequelize
 5. multer
 6. aws-sdk
-7. s3
+7. s3 bucket
    
 ## Building the application
 
