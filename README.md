@@ -15,7 +15,7 @@
 
 1. webservice.service runs the node application at boot up
 2. webapp.sh contains the command to run the node application
-3. Application is running on port 8080
+3. Hit demo.ketkikule.me
 
 ## Building the application
 
