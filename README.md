@@ -9,7 +9,14 @@
 5. multer
 6. aws-sdk
 7. s3 bucket
-   
+
+
+## WorkFlow
+
+1. webservice.service runs the node application at boot up
+2. webapp.sh contains the command to run the node application
+3. Application is running on port 8080
+
 ## Building the application
 
 1. Clone the repository
