@@ -1,12 +1,12 @@
 {
     "variables": {
-        "aws_access_key": "AKIAZ3ZIQD6VBWR3VGVD",
-        "aws_secret_key": "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",
-        "aws_region": "us-east-1",
-        "source_ami": "ami-048ff3da02834afdc",
-        "aws_instance_type": "t2.micro",
-        "ssh_username": "ec2-user",
-        "demo_account_id":"678152904618"
+        "aws_access_key": "",
+        "aws_secret_key": "",
+        "aws_region": "",
+        "source_ami": "",
+        "aws_instance_type": "",
+        "ssh_username": "",
+        "demo_account_id":""
     },
     "builders": [
         {
