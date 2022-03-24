@@ -19,6 +19,7 @@
             "source_ami": "{{user `source_ami`}}",
             "ssh_username": "{{user `ssh_username`}}",
             "ami_name": "csye6225_{{timestamp}}",
+            "ami_users": "{{user `demo_account_id`}}",
 			"associate_public_ip_address": true,
             "tags":{
                 "Name": "ketki-{{timestamp}}"
