@@ -2,13 +2,15 @@
 
 ## Prerequisites
     
-1. Express JS
-2. jest (for unit testing)
-3. mySql
-4. Sequelize
-5. multer
-6. aws-sdk
-7. s3 bucket
+1. Node.js
+2. Express.js
+3. jest (for unit testing)
+4. mySql
+5. Sequelize
+6. multer
+7. aws-sdk
+8. s3 bucket
+   
 
 
 ## WorkFlow
