@@ -27,18 +27,38 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+      
+      - name: Create zip
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
-      - run: git archive -o webservice.zip HEAD
-      - run: cp webservice.zip ami
-      - run: cd ami
+      - run: git archive -o webservice_${{  github.sha  }}.zip HEAD
+      - run: mkdir codedeploy_files
+      - run: mv webservice_${{  github.sha  }}.zip codedeploy_files
+      - run: pwd
+      - run: cd codedeploy_files
       - run: ls -all        
+      
+      - name: Install softwares
+        run: |
+          pwd
+          ls -ltrh
+          sudo apt-get update
+          sudo apt-get -qy upgrade
+          curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+          sudo apt-get install -y nodejs
+          sudo apt-get install python3-pip
+          python -m pip install --user awscliv2
+          aws --version
+          
+          
+      - name: Upload code to S3
+        run: |
+          cd codedeploy_files
+          aws configure set region ${{ secrets.AWS_REGION }} --profile default
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile default
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile default
+          aws s3 cp webservice_${{  github.sha  }}.zip s3://${{ secrets.S3_CODEDEPLOY_BUCKET_NAME }}
 
       - name: Packer build
         uses: riznob/packer-build-action@v1.5
