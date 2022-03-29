@@ -54,12 +54,3 @@ jobs:
         run: |
           aws s3 sync ./codedeploy_files s3://${{ secrets.S3_CODEDEPLOY_BUCKET_NAME }}
 
-      - name: Packer build
-        uses: riznob/packer-build-action@v1.5
-        with:
-          templateFile: 'AMI.json'
-          workingDir: './ami'
-          varFile: 'packer-vars.json'
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
