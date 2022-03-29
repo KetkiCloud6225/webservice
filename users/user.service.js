@@ -64,7 +64,7 @@ async function create(params) {
             account_created: user.createdAt,
             account_updated: user.updatedAt 
         },
-        status: 200
+        status: 201
     }
 }
 
