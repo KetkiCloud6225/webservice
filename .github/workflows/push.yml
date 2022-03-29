@@ -42,25 +42,17 @@ jobs:
       - run: cd codedeploy_files
       - run: ls -all    
       
-      - name: Install softwares
-      - run: pwd
-          ls -ltrh
-          sudo apt-get update
-          sudo apt-get -qy upgrade
-          curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-          sudo apt-get install -y nodejs
-          sudo apt-get install python3-pip
-          python -m pip install --user awscliv2
-          aws --version
+
+      - name: Configure AWS credentials from Test account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
           
-          
-      - name: Upload code to S3
+      - name: Copy files to the S3 bucket with the AWS CLI
         run: |
-          cd codedeploy_files
-          aws configure set region ${{ secrets.AWS_REGION }} --profile default
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile default
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile default
-          aws s3 cp webservice_${{  github.sha  }}.zip s3://${{ secrets.S3_CODEDEPLOY_BUCKET_NAME }}
+          aws s3 sync ./codedeploy_files s3://${{ secrets.S3_CODEDEPLOY_BUCKET_NAME }}
 
       - name: Packer build
         uses: riznob/packer-build-action@v1.5
