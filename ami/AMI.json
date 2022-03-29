@@ -29,11 +29,6 @@
     ],	
     "provisioners": [
         {
-			"source":"webservice.zip",
-			"destination":"/home/ec2-user/webservice.zip",
-			"type":"file"
-		},
-        {
 					
             "type": "shell",
             "inline": [
@@ -45,11 +40,18 @@
                 "sleep 10",
                 "ls -all",
                 "sudo yum install unzip -y",
-                "cd ~/ && unzip webservice.zip",
                 "sleep 20",
                 "pwd",
                 "ls -l",
-                "npm install"
+                "npm install",
+                "sudo yum -y update",
+                "sudo yum install ruby",
+                "sudo yum install wget",
+                "wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install",
+                "chmod +x ./install",
+                "sudo ./install auto",
+                "sudo service codedeploy-agent start",
+                "sudo service codedeploy-agent status"
             ]		
         },
         {
