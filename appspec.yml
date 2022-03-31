@@ -2,20 +2,20 @@ version: 0.0
 os: linux
 files:
   - source: ./
-    destination: /home/ec2-user
+    destination: /home/ec2-user/webserver
     overwrite: true
     file_exists_behavior: OVERWRITE
     
 hooks:
   BeforeInstall:
-    - location: ./codedeploy/beforeInstall.sh
+    - location: ./webserver/codedeploy/beforeInstall.sh
       timeout: 180
   AfterInstall:
-    - location: ./codedeploy/afterInstall.sh
+    - location: ./webserver/codedeploy/afterInstall.sh
       timeout: 180
   ApplicationStart:
-    - location: ./codedeploy/applicationStart.sh
+    - location: ./webserver/codedeploy/applicationStart.sh
       timeout: 180
   ApplicationStop:
-    - location: ./codedeploy/applicationStop.sh
+    - location: ./webserver/codedeploy/applicationStop.sh
       timeout: 180      

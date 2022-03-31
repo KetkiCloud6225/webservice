@@ -1,2 +1,2 @@
 #!/bin/sh
-node /home/ec2-user/index.js
+node /home/ec2-user/webserver/index.js

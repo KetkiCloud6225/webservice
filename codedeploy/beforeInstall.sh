@@ -2,15 +2,11 @@
 
 cd /home/ec2-user
 
-source ~/.bashrc
-
-sudo shopt -s extglob
-
-sudo rm !(*.env)
-
-sudo shopt -u extglob
-
-sudo pkill node
+sudo kill -9 $(pgrep node)
 
 sudo systemctl stop webservice.service
+
+sudo rm -rf webserver
+
+sudo cp /environment.env /webserver
 

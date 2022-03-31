@@ -1,4 +1,5 @@
 #!bin/bash
 
-sudo npm install
+cd /home/ec2-user/webserver 
+npm install
 sudo systemctl start webservice.service
