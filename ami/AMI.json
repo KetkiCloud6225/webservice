@@ -48,7 +48,7 @@
                 "cd ~/ && mkdir webserver",
                 "pwd",
                 "ls -l",                
-                "unzip webservice.zip -d /webserver",
+                "unzip webservice.zip -d webserver",
                 "sleep 20",
                 "pwd",
                 "ls -l",
