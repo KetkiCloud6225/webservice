@@ -46,6 +46,8 @@
                 "ls -all",
                 "sudo yum install unzip -y",            
                 "cd ~/ && sudo mkdir webserver && sudo cp webservice.zip /webserver",
+                "pwd",
+                "ls -l",
                 "cd ~/ && cd webserver && unzip webservice.zip",
                 "sleep 20",
                 "pwd",
