@@ -41,13 +41,12 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
-      - run: git archive -o webservice.zip HEAD      
+      - run: git archive -o webservice.zip HEAD  
+      - run: cp webservice.zip ami      
       - run: git archive -o ${{env.ARTIFACT_NAME}} HEAD
       - run: mkdir codedeploy_files
       - run: mv ${{env.ARTIFACT_NAME}} codedeploy_files
-      - run: pwd
-      - run: cd codedeploy_files
-      - run: ls -all    
+      - run: pwd 
       
 
       - name: Configure AWS credentials from Test account
@@ -59,8 +58,16 @@ jobs:
           
       - name: Copy files to the S3 bucket with the AWS CLI
         run: |
-          aws s3 sync ./codedeploy_files s3://${{ secrets.S3_CODEDEPLOY_BUCKET_NAME }}
-          
+          aws s3 sync ./codedeploy_files s3://${{ secrets.S3_CODEDEPLOY_BUCKET_NAME }}  
+             
+      - name: Make CodeDeploy API call             
+        run: |
+            aws deploy create-deployment \
+             --application-name ${{env.CODEDEPLOY_APPLICATION_NAME}} \
+             --deployment-group-name ${{env.CODEDEPLOY_APPLICATION_DEPLOYMENT_GROUP_NAME}} \
+             --s3-location bucket=dev.ketkikule.me.codedeploy,bundleType=zip,key=${{ env.ARTIFACT_NAME }} \
+             --region ${{env.AWS_REGION}}
+
       - name: Packer build
         uses: riznob/packer-build-action@v1.5
         with:
@@ -69,8 +76,8 @@ jobs:
           varFile: 'packer-vars.json'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}     
-          
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}             
+               
    
 
           
