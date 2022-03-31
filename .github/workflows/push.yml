@@ -45,9 +45,7 @@ jobs:
       - run: git archive -o ${{env.ARTIFACT_NAME}} HEAD
       - run: mkdir codedeploy_files
       - run: mv ${{env.ARTIFACT_NAME}} codedeploy_files
-      - run: pwd
-      - run: cd codedeploy_files
-      - run: ls -all    
+      - run: pwd 
       
 
       - name: Configure AWS credentials from Test account
