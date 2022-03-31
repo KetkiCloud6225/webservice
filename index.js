@@ -19,7 +19,7 @@ app.use(cors());
 app.use('/v1/user', require('./users/users.controller'));
 
 //healthz route 
-app.use("/health",healthzRouter.router);
+app.use("/healthz",healthzRouter.router);
 
 // global error handler
 app.use(errorHandler);
