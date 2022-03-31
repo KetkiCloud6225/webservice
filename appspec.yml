@@ -8,14 +8,14 @@ files:
     
 hooks:
   BeforeInstall:
-    - location: ./webserver/codedeploy/beforeInstall.sh
+    - location: ./codedeploy/beforeInstall.sh
       timeout: 180
   AfterInstall:
-    - location: ./webserver/codedeploy/afterInstall.sh
+    - location: ./codedeploy/afterInstall.sh
       timeout: 180
   ApplicationStart:
-    - location: ./webserver/codedeploy/applicationStart.sh
+    - location: ./codedeploy/applicationStart.sh
       timeout: 180
   ApplicationStop:
-    - location: ./webserver/codedeploy/applicationStop.sh
+    - location: ./codedeploy/applicationStop.sh
       timeout: 180      
