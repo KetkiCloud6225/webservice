@@ -30,7 +30,7 @@
     "provisioners": [
         {
 			"source":"webservice.zip",
-			"destination":"/home/ec2-user/webservice.zip",
+			"destination":"/home/ec2-user/webserver/webservice.zip",
 			"type":"file"
 		},
         {
@@ -45,11 +45,12 @@
                 "sleep 10",
                 "ls -all",
                 "sudo yum install unzip -y",
-                "cd ~/ && unzip webservice.zip",
+                "cd ~/ && cd webserver && unzip webservice.zip",
                 "sleep 20",
                 "pwd",
                 "ls -l",
                 "npm install",
+                "cd ~/",
                 "sudo yum -y update",
                 "sudo yum install ruby -y",
                 "sudo yum install wget -y",
