@@ -41,6 +41,7 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
+      - run: git archive -o webservice.zip HEAD      
       - run: git archive -o ${{env.ARTIFACT_NAME}} HEAD
       - run: mkdir codedeploy_files
       - run: mv ${{env.ARTIFACT_NAME}} codedeploy_files
