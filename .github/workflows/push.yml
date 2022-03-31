@@ -2,6 +2,12 @@
 
 name: Push Action
 
+env: 
+    ARTIFACT_NAME : csye6225-webapp-${{ github.sha }}.zip
+    CODEDEPLOY_APPLICATION_NAME : csye6225-webapp
+    CODEDEPLOY_APPLICATION_DEPLOYMENT_GROUP_NAME : csye6225-webapp-deployment
+    AWS_REGION : us-east-1
+
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
@@ -35,9 +41,9 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
-      - run: git archive -o webservice_${{  github.sha  }}.zip HEAD
+      - run: git archive -o ${{env.ARTIFACT_NAME}} HEAD
       - run: mkdir codedeploy_files
-      - run: mv webservice_${{  github.sha  }}.zip codedeploy_files
+      - run: mv ${{env.ARTIFACT_NAME}} codedeploy_files
       - run: pwd
       - run: cd codedeploy_files
       - run: ls -all    
@@ -52,5 +58,17 @@ jobs:
           
       - name: Copy files to the S3 bucket with the AWS CLI
         run: |
-          aws s3 sync ./codedeploy_files s3://${{ secrets.S3_CODEDEPLOY_BUCKET_NAME }}
+          aws s3 sync ./codedeploy_files s3://${{ secrets.S3_CODEDEPLOY_BUCKET_NAME }}       
+          
+      - name: Packer build
+        uses: riznob/packer-build-action@v1.5
+        with:
+          templateFile: 'AMI.json'
+          workingDir: './ami'
+          varFile: 'packer-vars.json'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}          
 
+          
+          
