@@ -8,5 +8,7 @@ sudo systemctl stop webservice.service
 
 sudo rm -rf webserver
 
-sudo cp /environment.env /webserver
+pwd 
+
+sudo cp environment.env webserver
 
