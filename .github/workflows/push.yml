@@ -41,9 +41,9 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
-      - run: git archive -o webservice_${{  github.sha  }}.zip HEAD
+      - run: git archive -o ${{env.ARTIFACT_NAME}} HEAD
       - run: mkdir codedeploy_files
-      - run: mv webservice_${{  github.sha  }}.zip codedeploy_files
+      - run: mv ${{env.ARTIFACT_NAME}} codedeploy_files
       - run: pwd
       - run: cd codedeploy_files
       - run: ls -all    
@@ -65,7 +65,7 @@ jobs:
             aws deploy create-deployment \
              --application-name ${{env.CODEDEPLOY_APPLICATION_NAME}} \
              --deployment-group-name ${{env.CODEDEPLOY_APPLICATION_DEPLOYMENT_GROUP_NAME}} \
-             --s3-location bucket=dev.ketkikule.me.codedeploy,bundleType=zip,key=webservice_${{  github.sha  }}.zip \
+             --s3-location bucket=dev.ketkikule.me.codedeploy,bundleType=zip,key=${{env.ARTIFACT_NAME}} \
              --region ${{env.AWS_REGION}}          
           
       - name: Packer build
