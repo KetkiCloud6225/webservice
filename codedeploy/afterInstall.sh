@@ -1,3 +1,3 @@
 #!bin/bash
 
-sudo systemctl enable webservice.service
+sudo systemctl stop webservice.service

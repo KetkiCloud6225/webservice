@@ -1,15 +1,18 @@
 version: 0.0
 os: linux
 files:
-  - source: /
+  - source: ./
     destination: /home/ec2-user/webapp
 hooks:
   BeforeInstall:
-    - location: codedeploy/beforeInstall.sh
-      timeout: 300
+    - location: ./codedeploy/beforeInstall.sh
+      timeout: 180
   AfterInstall:
-    - location: codedeploy/afterInstall.sh
-      timeout: 300
+    - location: ./codedeploy/afterInstall.sh
+      timeout: 180
   ApplicationStart:
-    - location: codedeploy/applicationStart.sh
-      timeout: 300
+    - location: ./codedeploy/applicationStart.sh
+      timeout: 180
+  ApplicationStop:
+    - location: ./codedeploy/applicationStop.sh
+      timeout: 180      
