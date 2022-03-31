@@ -2,6 +2,12 @@
 
 name: Push Action
 
+env: 
+    ARTIFACT_NAME : csye6225-webapp-${{ github.sha }}.zip
+    CODEDEPLOY_APPLICATION_NAME : csye6225-webapp
+    CODEDEPLOY_APPLICATION_DEPLOYMENT_GROUP_NAME : csye6225-webapp-deployment
+    AWS_REGION : us-east-1
+
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
@@ -53,6 +59,14 @@ jobs:
       - name: Copy files to the S3 bucket with the AWS CLI
         run: |
           aws s3 sync ./codedeploy_files s3://${{ secrets.S3_CODEDEPLOY_BUCKET_NAME }}
+          
+      - name: Make CodeDeploy API call             
+        run: |
+            aws deploy create-deployment \
+             --application-name ${{env.CODEDEPLOY_APPLICATION_NAME}} \
+             --deployment-group-name ${{env.CODEDEPLOY_APPLICATION_DEPLOYMENT_GROUP_NAME}} \
+             --s3-location bucket={{ secrets.S3_CODEDEPLOY_BUCKET_NAME }},bundleType=zip,key=${{ env.ARTIFACT_NAME }} \
+             --region ${{env.AWS_REGION}}          
           
       - name: Packer build
         uses: riznob/packer-build-action@v1.5
