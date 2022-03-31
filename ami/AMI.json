@@ -50,7 +50,7 @@
                 "pwd",
                 "ls -l",
                 "npm install",
-                "cd ~/"
+                "cd ~/",
                 "sudo yum -y update",
                 "sudo yum install ruby -y",
                 "sudo yum install wget -y",
