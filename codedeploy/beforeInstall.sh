@@ -10,5 +10,9 @@ sudo rm -rf webserver
 
 pwd 
 
-sudo cp environment.env webserver
+ls
+
+mkdir webserver
+
+sudo cp environment.env /webserver
 
