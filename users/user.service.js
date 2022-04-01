@@ -9,10 +9,10 @@ AWS.config.update({region: 'us-east-1'});
 
 require('dotenv').config();
 
-AWS.config.update({
-    accessKeyId: process.env.ACCESS_KEY,
-    secretAccessKey: process.env.SECRET_KEY
-  }); 
+// AWS.config.update({
+//     accessKeyId: process.env.ACCESS_KEY,
+//     secretAccessKey: process.env.SECRET_KEY
+// }); 
 
 //   AWS.config.update({
 //     accessKeyId: "AKIAZ3ZIQD6VBWR3VGVD",
