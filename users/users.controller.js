@@ -8,6 +8,8 @@ const basicAuth = require('../_helpers/basic_auth');
 const multer  = require('multer');
 //const upload = multer({dest: 'uploads/'});
 const path = require('path'); 
+const log = require("../logs");
+const logger = log.getLogger('logs');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -20,6 +22,9 @@ const storage = multer.diskStorage({
 
   const upload = multer({storage: storage})
 // routes
+var SDC = require('statsd-client'),
+	sdc = new SDC({port: 8125});
+
 
 router.post('/self/pic',[basicAuth,upload.single('profilePic')],uploadPic);
 router.get('/self', basicAuth,getUser);
@@ -41,6 +46,8 @@ module.exports = router;
 
 
 function getUser(req,res, next) {
+    logger.info("User fetched"); 
+    sdc.increment("User.GET.get_user");
     userService.getById(req.user.id)
         .then(user => res.json(user))
         .catch(next);
@@ -72,6 +79,8 @@ function getById(req, res, next) {
 }
 
 function create(req, res, next) {
+    logger.info("User created");
+    sdc.increment("User.POST.create_user");
     userService.create(req.body)
         .then(user => {
             if(user.status === 201) {
