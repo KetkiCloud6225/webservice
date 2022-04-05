@@ -52,22 +52,31 @@ jobs:
       - name: Configure AWS credentials from Test account
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEMO }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEMO }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           
       - name: Copy files to the S3 bucket with the AWS CLI
         run: |
-          aws s3 sync ./codedeploy_files s3://${{ secrets.S3_CODEDEPLOY_BUCKET_NAME_DEMO }}  
+          aws s3 sync ./codedeploy_files s3://${{ secrets.S3_CODEDEPLOY_BUCKET_NAME }}  
 
-      - name: Make CodeDeploy API call             
-        run: |
-            aws deploy create-deployment \
-             --application-name ${{env.CODEDEPLOY_APPLICATION_NAME}} \
-             --deployment-group-name ${{env.CODEDEPLOY_APPLICATION_DEPLOYMENT_GROUP_NAME}} \
-             --s3-location bucket=${{ secrets.S3_CODEDEPLOY_BUCKET_NAME_DEMO }},bundleType=zip,key=${{ env.ARTIFACT_NAME }} \
-             --region ${{env.AWS_REGION}}          
+#       - name: Make CodeDeploy API call             
+#         run: |
+#             aws deploy create-deployment \
+#              --application-name ${{env.CODEDEPLOY_APPLICATION_NAME}} \
+#              --deployment-group-name ${{env.CODEDEPLOY_APPLICATION_DEPLOYMENT_GROUP_NAME}} \
+#              --s3-location bucket=${{ secrets.S3_CODEDEPLOY_BUCKET_NAME }},bundleType=zip,key=${{ env.ARTIFACT_NAME }} \
+#              --region ${{env.AWS_REGION}}          
           
+      - name: Packer build
+        uses: riznob/packer-build-action@v1.5
+        with:
+          templateFile: 'AMI.json'
+          workingDir: './ami'
+          varFile: 'packer-vars.json'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
           
           
