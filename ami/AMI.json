@@ -63,8 +63,9 @@
                 "sudo ./install auto",
                 "sudo service codedeploy-agent start",
                 "sudo service codedeploy-agent status",
-                "wget https://s3.us-east-1.amazonaws.com/amazoncloudwatch-agent-us-east-1/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm",
-                "sudo rpm -U ./amazon-cloudwatch-agent.rpm"
+                "sudo mv /home/ec2-user/webserver/cloudwatch-config.json /opt/",
+                "sudo yum install -y amazon-cloudwatch-agent",
+				"sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/cloudwatch-config.json -s"
             ]		
         },
         {
