@@ -54,6 +54,8 @@ function getUser(req,res, next) {
 }
 
 function getPic(req,res, next) {
+    logger.info("Get Pic fetched"); 
+    sdc.increment("User.GET.get_pic");
     userService.getPic(req.user.id)
         .then(user => {
             if(user.status === 201) {
@@ -94,6 +96,8 @@ function create(req, res, next) {
 }
 
 function update(req, res, next) {
+    logger.info("Update File"); 
+    sdc.increment("User.UPDATE.update_user");
     userService.update(req.body,req.user.username)
         .then(user => {
             res.sendStatus(user.status);
@@ -108,7 +112,8 @@ function _delete(req, res, next) {
 }
 
 function deletePic(req, res, next) {
-    console.log("delete called in controller")
+    logger.info("Delete Pic"); 
+    sdc.increment("User.DELETE.delete_PIC");
     userService.deletePic(req.user.id)
         .then((user) => {
             res.sendStatus(user.status);
@@ -119,9 +124,7 @@ function deletePic(req, res, next) {
 //upload ProfilePic
 function uploadPic(req,res,next) {
     userService.uploadPic(req.body,req.file,req.user.id)
-        .then(user => {
-            console.log("uploadPic return value");
-            console.log(user);
+        .then(user => {            
             if(user.status === 201) {
                 res.status(user.status);
                 res.json(user.data);
