@@ -81,10 +81,14 @@ function getById(req, res, next) {
 }
 
 function create(req, res, next) {
+    let completionTime = new Date();
+    let startTime = new Date();
+    sdc.timing("User.POST.db_create_user",startTime); 
     logger.info("User created");
     sdc.increment("User.POST.create_user");
     userService.create(req.body)
         .then(user => {
+            sdc.timing("User.POST.create_user",completionTime); 
             if(user.status === 201) {
                 res.status(user.status);
                 res.json(user.data);
