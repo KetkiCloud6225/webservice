@@ -65,7 +65,7 @@ jobs:
             aws deploy create-deployment \
              --application-name ${{env.CODEDEPLOY_APPLICATION_NAME}} \
              --deployment-group-name ${{env.CODEDEPLOY_APPLICATION_DEPLOYMENT_GROUP_NAME}} \
-             --s3-location bucket=${{ secrets.S3_CODEDEPLOY_BUCKET_NAME }},bundleType=zip,key=${{ env.ARTIFACT_NAME }} \
+             --s3-location bucket=${{ secrets.S3_CODEDEPLOY_BUCKET_NAME_DEMO }},bundleType=zip,key=${{ env.ARTIFACT_NAME }} \
              --region ${{env.AWS_REGION}}          
           
 #       - name: Packer build
