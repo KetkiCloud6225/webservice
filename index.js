@@ -16,7 +16,7 @@ app.use(cors());
 //app.use(basicAuth);
 
 // api routes
-app.use('/v1/user', require('./users/users.controller'));
+app.use('/v2/user', require('./users/users.controller'));
 
 //healthz route 
 app.use("/healthz",healthzRouter.router);
