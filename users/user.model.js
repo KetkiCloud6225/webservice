@@ -8,7 +8,9 @@ function model(sequelize) {
         first_name: { type: DataTypes.STRING, allowNull: false },
         last_name: { type: DataTypes.STRING, allowNull: false },
         username: { type: DataTypes.STRING, allowNull: false },
-        password: { type: DataTypes.STRING, allowNull: false }
+        password: { type: DataTypes.STRING, allowNull: false },
+        verified : { type : DataTypes.BOOLEAN, defaultValue : false, allowNull: false },
+        verified_on : { type : DataTypes.DATE }
     };
 
     return sequelize.define('User', attributes,  {
