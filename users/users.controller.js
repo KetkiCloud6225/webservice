@@ -38,7 +38,7 @@ router.post('/', createSchema, create);
 //router.put('/:id', updateSchema, update);
 router.put('/self', [basicAuth,updateSchema], update);
 //router.delete('/:id', _delete);
-
+router.get('/verifyUser/:token/:username',verifyEmail);
 
 module.exports = router;
 
@@ -88,6 +88,27 @@ function create(req, res, next) {
     sdc.increment("User.POST.create_user");
     userService.create(req.body)
         .then(user => {
+            //verify email
+            const params = {
+                Message: JSON.stringify({ username: inputEmail, token : uuidv4()}),
+                TopicArn: "arn:aws:sns:us-east-1:979268690280:verify_email",
+            };
+            const sns = new aws.SNS({ apiVersion: "2010-03-31" })
+                .publish(params)
+                .promise();
+                sns
+                .then(function (data) {
+                console.log(
+                    `Message ${params.Message} send sent to the topic ${params.TopicArn}`
+                );                
+                console.log("MessageID is " + data.MessageId);
+            })
+            .catch(function (err) {
+            console.error(err, err.stack);
+            });
+                        
+            //
+
             sdc.timing("User.POST.create_user",completionTime); 
             if(user.status === 201) {
                 res.status(user.status);
@@ -97,6 +118,61 @@ function create(req, res, next) {
             }
         })
         .catch(next);
+}
+
+
+function verifyEmail(req,res,next) {
+    if(req){
+        let apiResponse = {
+            username : req.params.username,
+            token : req.params.token
+        }
+        let table = {
+            TableName: "csye6225",
+            Key :{
+                "username" : req.params.username
+            }
+        }
+        docClient.get(table,function (err,data){
+            if(err){
+                console.log("csye6225::fetchOneByKey::error- "+JSON.stringify(err,null,2));
+            }
+            else{
+                console.log("csye6225::fetchOneByKey::success- "+JSON.stringify(data,null,2));
+                let ttl = data.Item.TimeToExist
+                let verificationEmail = data.Item.username
+                console.log("TTL is ::"+ ttl) 
+                if(data.Item && data.Item.TimeToExist && data.Item.token && data.Item.username){
+                    console.log("in first if")
+                    if(data.Item.TimeToExist > Math.floor(Date.now() / 1000)){
+                        console.log(verificationEmail,"ttl verified")
+                        let verifiedDate = new Date();
+                        let verifiedUser = {
+                            verified : true,
+                            verified_on : verifiedDate,
+                        }
+                        console.log(verifiedUser, "User verified created")
+                        userService.verifyUser(verificationEmail).then((data) => {
+                            console.log(data,"updated user")     
+                            if(data.status == 204){
+                                res.status(201).send({
+                                    token : req.params.token,
+                                    username : req.params.username
+                                });
+                        }
+                    })  
+                }else{
+                    res.status(400).send({
+                        error : "TTL expired"
+                    })
+                }
+            }
+        }})
+    }
+}
+
+
+
 }
 
 function update(req, res, next) {

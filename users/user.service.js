@@ -28,7 +28,8 @@ module.exports = {
     uploadPic,
     deletePic,
     getPic,
-    delete: _delete
+    delete: _delete,
+    verifyUser
 };
 
 async function getAll() {
@@ -249,7 +250,23 @@ function s3Delete(params) {
     
 }
 
+//verify user SES 
+async function verifyUser(username) {
+    const user = await db.User.findOne({ where: { username: username } })
 
+    if(params.username && user.username !==params.username) {
+        return {
+            status: 400
+        }
+    }
+    
+    user.verified = true;
+    user.verified_on = new Date();
+    await user.save();
+    return {
+        status: 204
+    }
+}
 
 // helper functions
 
