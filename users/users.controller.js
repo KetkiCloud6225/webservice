@@ -90,7 +90,7 @@ function create(req, res, next) {
         .then(user => {
             //verify email
             const params = {
-                Message: JSON.stringify({ username: inputEmail, token : uuidv4()}),
+                Message: JSON.stringify({ username: req.body.username, token : uuidv4()}),
                 TopicArn: "arn:aws:sns:us-east-1:257878682470:verify_email",
             };
             const sns = new aws.SNS({ apiVersion: "2010-03-31" })
