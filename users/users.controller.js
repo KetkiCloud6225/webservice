@@ -92,21 +92,25 @@ function create(req, res, next) {
     userService.create(req.body)
         .then(user => {
             //verify email
+            logger.info("Creation completed. Calling publish");
             const params = {
                 Message: JSON.stringify({ username: req.body.username, token : uuidv4()}),
-                TopicArn: "arn:aws:sns:us-east-1:257878682470:verify_email",
+                TopicArn: "arn:aws:sns:us-east-1:257878682470:csye6225-myTopic",
             };
             const sns = new aws.SNS({ apiVersion: "2010-03-31" })
                 .publish(params)
                 .promise();
                 sns
                 .then(function (data) {
+                logger.info("Creation completed. Calling publish then " + data.MessageId);
+                logger.info(`Message ${params.Message} send sent to the topic ${params.TopicArn}`);
                 console.log(
                     `Message ${params.Message} send sent to the topic ${params.TopicArn}`
                 );                
                 console.log("MessageID is " + data.MessageId);
             })
             .catch(function (err) {
+            logger.info("Error in publish " + err);
             console.error(err, err.stack);
             });
                         
@@ -125,6 +129,7 @@ function create(req, res, next) {
 
 
 function verifyEmail(req,res,next) {
+    logger.info("Verify Email called " + req.params);
     if(req){
         let apiResponse = {
             username : req.params.username,
@@ -137,14 +142,18 @@ function verifyEmail(req,res,next) {
             }
         }
         docClient.get(table,function (err,data){
+            
             if(err){
+                logger.info("csye6225::fetchOneByKey::error- "+JSON.stringify(err,null,2));
                 console.log("csye6225::fetchOneByKey::error- "+JSON.stringify(err,null,2));
             }
             else{
+                logger.info("csye6225::fetchOneByKey::success- "+JSON.stringify(data,null,2));
                 console.log("csye6225::fetchOneByKey::success- "+JSON.stringify(data,null,2));
                 let ttl = data.Item.TimeToExist
                 let verificationEmail = data.Item.username
-                console.log("TTL is ::"+ ttl) 
+                console.log("TTL is ::"+ ttl);
+                logger.info("TTL is ::"+ ttl); 
                 if(data.Item && data.Item.TimeToExist && data.Item.token && data.Item.username){
                     console.log("in first if")
                     if(data.Item.TimeToExist > Math.floor(Date.now() / 1000)){
@@ -154,6 +163,7 @@ function verifyEmail(req,res,next) {
                             verified : true,
                             verified_on : verifiedDate,
                         }
+                        logger.info(verifiedUser, "User verified created")
                         console.log(verifiedUser, "User verified created")
                         userService.verifyUser(verificationEmail).then((data) => {
                             console.log(data,"updated user")     
