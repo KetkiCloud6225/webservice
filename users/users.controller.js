@@ -11,6 +11,9 @@ const path = require('path');
 const log = require("../logs");
 const logger = log.getLogger('logs');
 const { v4: uuidv4 } = require("uuid");
+const aws = require('aws-sdk');
+aws.config.update({region:'us-east-1'});
+var docClient = new aws.DynamoDB.DocumentClient();
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
     cb(null, 'uploads/')
