@@ -13,14 +13,14 @@ const logger = log.getLogger('logs');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, 'uploads/')
+    cb(null, 'uploads/')
     },
     filename: function (req, file, cb) {
-      cb(null, file.originalname)
+    cb(null, file.originalname)
     }
-  })
+})
 
-  const upload = multer({storage: storage})
+const upload = multer({storage: storage})
 // routes
 var SDC = require('statsd-client'),
 	sdc = new SDC({port: 8125});
@@ -171,9 +171,6 @@ function verifyEmail(req,res,next) {
     }
 }
 
-
-
-}
 
 function update(req, res, next) {
     logger.info("Update File"); 
