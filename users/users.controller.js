@@ -29,19 +29,19 @@ var SDC = require('statsd-client'),
 	sdc = new SDC({port: 8125});
 
 
-router.post('/self/pic',[basicAuth,upload.single('profilePic')],uploadPic);
-router.get('/self', basicAuth,getUser);
-router.delete('/self/pic',basicAuth,deletePic);
-router.get('/self/pic',basicAuth,getPic);
+router.post('/user/self/pic',[basicAuth,upload.single('profilePic')],uploadPic);
+router.get('/user/self', basicAuth,getUser);
+router.delete('/user/self/pic',basicAuth,deletePic);
+router.get('/user/self/pic',basicAuth,getPic);
 //router.put('/self/pic',[basicAuth,upload.single('profilePic')],updatePic);
 
-router.get('/self', basicAuth,getUser);
+router.get('/user/self', basicAuth,getUser);
 //router.get('/:id', getById);
-router.post('/', createSchema, create);
+router.post('/user', createSchema, create);
 //router.put('/:id', updateSchema, update);
-router.put('/self', [basicAuth,updateSchema], update);
+router.put('/user/self', [basicAuth,updateSchema], update);
 //router.delete('/:id', _delete);
-router.get('/verifyUser/:token/:username',verifyEmail);
+router.get('/verifyUser',verifyEmail);
 
 module.exports = router;
 
@@ -95,7 +95,7 @@ function create(req, res, next) {
             logger.info("Creation completed. Calling publish");
             const params = {
                 Message: JSON.stringify({ username: req.body.username, token : uuidv4()}),
-                TopicArn: "arn:aws:sns:us-east-1:257878682470:csye6225-myTopic",
+                TopicArn: "arn:aws:sns:us-east-1:257878682470:csye6225-topic",
             };
             const sns = new aws.SNS({ apiVersion: "2010-03-31" })
                 .publish(params)
@@ -129,16 +129,16 @@ function create(req, res, next) {
 
 
 function verifyEmail(req,res,next) {
-    logger.info("Verify Email called " + req.params);
+    logger.info("Verify Email called " + req.query);
     if(req){
         let apiResponse = {
-            username : req.params.username,
-            token : req.params.token
+            username : req.query.email,
+            token : req.query.token
         }
         let table = {
             TableName: "csye6225",
             Key :{
-                "username" : req.params.username
+                "username" : req.query.email
             }
         }
         docClient.get(table,function (err,data){
@@ -169,8 +169,8 @@ function verifyEmail(req,res,next) {
                             console.log(data,"updated user")     
                             if(data.status == 204){
                                 res.status(201).send({
-                                    token : req.params.token,
-                                    username : req.params.username
+                                    token : req.query.token,
+                                    username : req.query.email
                                 });
                         }
                     })  

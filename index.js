@@ -15,8 +15,9 @@ app.use(cors());
 // use basic HTTP auth to secure the api
 //app.use(basicAuth);
 
+
 // api routes
-app.use('/v1/user', require('./users/users.controller'));
+app.use('/v1', require('./users/users.controller'));
 
 //healthz route 
 app.use("/healthz",healthzRouter.router);
