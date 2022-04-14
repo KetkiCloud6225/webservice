@@ -41,7 +41,7 @@ router.post('/user', createSchema, create);
 //router.put('/:id', updateSchema, update);
 router.put('/user/self', [basicAuth,updateSchema], update);
 //router.delete('/:id', _delete);
-router.get('/verifyUser',verifyEmail);
+router.get('/verifyUserEmail',verifyEmail);
 
 module.exports = router;
 
@@ -139,8 +139,8 @@ function verifyEmail(req,res,next) {
         let table = {
             TableName: "csye6225",
             Key :{
-                "username" : {"S":req.query.email},
-                "token":{"S":req.query.token}
+                "username" : req.query.email,
+                "token":req.query.token
             }
         }
         docClient.get(table,function (err,data){
