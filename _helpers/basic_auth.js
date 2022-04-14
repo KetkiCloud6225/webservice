@@ -39,6 +39,10 @@ async function basicAuth(req, res, next) {
         return res.sendStatus(403).json({ message: 'Invalid Authentication Credentials' });
     }
 
+    if(user.verified === "false") {
+        return res.sendStatus(401).json({ message: 'Email not verified' });
+    }
+
     // attach user to request object
     req.user = user
 
