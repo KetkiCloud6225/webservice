@@ -111,7 +111,8 @@ async function authenticateUser({username,password}){
         last_name: user.last_name,
         username: user.username,
         createdAt: user.createdAt,
-        updatedAt: user.updatedAt
+        updatedAt: user.updatedAt,
+        verified:user.verified
 
     }; 
 }
@@ -253,6 +254,7 @@ function s3Delete(params) {
 //verify user SES 
 async function verifyUser(username) {
     const user = await db.User.findOne({ where: { username: username } })
+
     
     user.verified = true;
     user.verified_on = new Date();
@@ -290,7 +292,7 @@ async function getPic(id) {
         last_name: user.last_name,
         username: user.username,
         account_created: user.createdAt,
-        account_updated: user.updatedAt
-
+        account_updated: user.updatedAt,
+        verified: user.verified
     };
 }

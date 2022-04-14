@@ -148,17 +148,20 @@ function verifyEmail(req,res,next) {
             if(err){
                 logger.info("csye6225::fetchOneByKey::error- "+JSON.stringify(err,null,2));
                 console.log("csye6225::fetchOneByKey::error- "+JSON.stringify(err,null,2));
+                res.status(400).send({
+                    error : "Validation Link expired"
+                })
             }
             else{
                 logger.info("csye6225::fetchOneByKey::success- "+JSON.stringify(data,null,2));
                 console.log("csye6225::fetchOneByKey::success- "+JSON.stringify(data,null,2));
-                let ttl = data.Item.TimeToExist
+                let ttl = data.Item.TimeToLive
                 let verificationEmail = data.Item.username
                 console.log("TTL is ::"+ ttl);
                 logger.info("TTL is ::"+ ttl); 
-                if(data.Item && data.Item.TimeToExist && data.Item.token && data.Item.username){
+                if(data.Item && data.Item.TimeToLive && data.Item.token && data.Item.username){
                     console.log("in first if")
-                    if(data.Item.TimeToExist > Math.floor(Date.now() / 1000)){
+                    if(data.Item.TimeToLive > Math.floor(Date.now() / 1000)){
                         console.log(verificationEmail,"ttl verified")
                         let verifiedDate = new Date();
                         let verifiedUser = {
@@ -178,7 +181,7 @@ function verifyEmail(req,res,next) {
                     })  
                 }else{
                     res.status(400).send({
-                        error : "TTL expired"
+                        error : "Validation Link expired"
                     })
                 }
             }
