@@ -129,7 +129,8 @@ function create(req, res, next) {
 
 
 function verifyEmail(req,res,next) {
-    logger.info("Verify Email called " + req.query);
+    logger.info("Verify Email called EMail received" + req.query.email);
+    logger.info("Verify Email called token received" + req.query.token);
     if(req){
         let apiResponse = {
             username : req.query.email,
@@ -138,7 +139,8 @@ function verifyEmail(req,res,next) {
         let table = {
             TableName: "csye6225",
             Key :{
-                "username" : req.query.email
+                "username" : {"S":req.query.email},
+                "token":{"S":req.query.token}
             }
         }
         docClient.get(table,function (err,data){
