@@ -254,13 +254,17 @@ function s3Delete(params) {
 //verify user SES 
 async function verifyUser(username) {
     const user = await db.User.findOne({ where: { username: username } })
-
-    
-    user.verified = true;
-    user.verified_on = new Date();
-    await user.save();
-    return {
-        status: 204
+    if(user.verified === 'true' || user.verified) {
+        return {
+            status: 409
+        }    
+    }else {
+        user.verified = true;
+        user.verified_on = new Date();
+        await user.save();
+        return {
+            status: 204
+        }
     }
 }
 
