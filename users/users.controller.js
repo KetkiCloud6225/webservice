@@ -242,7 +242,8 @@ function uploadPic(req, res, next) {
                 res.status(user.status);
                 res.json(user.data);
             } else {
-                res.sendStatus(user.status);
+                res.status(user.status);
+                res.json(user.data);
             }
         })
         .catch(next);
