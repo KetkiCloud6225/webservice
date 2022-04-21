@@ -3,7 +3,7 @@ const logger = log.getLogger('logs');
 const config = require('config.json');
 const mysql = require('mysql2/promise');
 const fs = require('fs');
-//const rdsCa = fs.readFileSync(__dirname + '/rds-combined-ca-bundle.pem');
+const rdsCa = fs.readFileSync('/home/ec2-user/global-bundle.pem');
 const {
     Sequelize
 } = require('sequelize');
@@ -35,7 +35,10 @@ async function initialize() {
         host: process.env.DB_HOST,
         dialect: 'mysql',
         dialectOptions: {
-            ssl: 'Amazon RDS'
+            ssl: {
+                rejectUnauthorized: true,
+                ca: [rdsCa]
+            }
         },
         replication: {
             read: [{
