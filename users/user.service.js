@@ -172,7 +172,10 @@ async function uploadPic(params,file,userId) {
         }
     } catch (e) {
         return {
-            status: 400
+            status: 400,
+            data: {
+                error: e
+            }
         }
     }
     
