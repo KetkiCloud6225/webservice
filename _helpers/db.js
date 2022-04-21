@@ -33,7 +33,7 @@ async function initialize() {
         host: process.env.DB_HOST,
         dialect: 'mysql',
         dialectOptions: {
-            ssl: 'Amazon RDS'
+            ssl: true
         },
         replication: {
             read: [{
